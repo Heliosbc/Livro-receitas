@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Shorts / TikTok Video Automation Generator
+Video Automation Generator (Shorts / TikTok / Reels / YouTube)
 Flow: Description/Topic -> Script Generation -> TTS Narration -> B-roll Download -> MoviePy Video Assembly & Subtitles -> Output MP4
 """
 
@@ -12,14 +12,15 @@ import tempfile
 from script_generator import generate_script
 from tts_generator import generate_audio
 from video_fetcher import fetch_background_video
-from video_editor import create_scene_clip, assemble_final_video
+from video_editor import create_scene_clip, assemble_final_video, FORMAT_DIMENSIONS
 
 
-def build_short_video(topic: str, niche: str, output_path: str, voice: str = "pt-BR-AntonioNeural", language: str = "pt"):
+def build_short_video(topic: str, niche: str, output_path: str, format_ratio: str = "9:16", voice: str = "pt-BR-AntonioNeural", language: str = "pt"):
     print("=" * 60)
-    print(f"🎬 Iniciando a geração do vídeo curto...")
+    print(f"🎬 Iniciando a geração do vídeo...")
     print(f"📌 Tema: {topic}")
     print(f"📌 Nicho: {niche}")
+    print(f"📌 Formato: {format_ratio}")
     print(f"📌 Idioma: {language}")
     print(f"📌 Saída: {output_path}")
     print("=" * 60)
@@ -50,11 +51,12 @@ def build_short_video(topic: str, niche: str, output_path: str, voice: str = "pt
             fetch_background_video(keyword=keyword, output_path=bg_video_path, target_duration=5.0)
 
             # Step 4: Scene Clip Assembly & Subtitle Overlay
-            print(f"[Passo 4/5] Renderizando composição da cena {idx} com legendas...")
+            print(f"[Passo 4/5] Renderizando composição da cena {idx} ({format_ratio}) com legendas...")
             clip = create_scene_clip(
                 video_path=bg_video_path,
                 audio_path=audio_path,
-                narration_text=text
+                narration_text=text,
+                target_format=format_ratio
             )
             scene_clips.append(clip)
 
@@ -78,9 +80,10 @@ def build_short_video(topic: str, niche: str, output_path: str, voice: str = "pt
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Automação de criação de vídeos verticais (Shorts/TikTok) por descrição de texto.")
-    parser.add_argument("--topic", "-t", type=str, required=True, help="Tema ou assunto do vídeo (ex: 'Curiosidades sobre o Espaço')")
+    parser = argparse.ArgumentParser(description="Automação de criação de vídeos por descrição de texto.")
+    parser.add_argument("--topic", "-t", type=str, required=True, help="Tema ou assunto do vídeo")
     parser.add_argument("--niche", "-n", type=str, default="Geral", help="Nicho do vídeo (ex: 'Ciência', 'Finanças', 'Fitness')")
+    parser.add_argument("--format", "-f", type=str, default="9:16", choices=["9:16", "16:9", "1:1"], help="Formato do vídeo: '9:16' (Vertical Shorts/TikTok), '16:9' (Horizontal YouTube), '1:1' (Quadrado Instagram)")
     parser.add_argument("--output", "-o", type=str, default="output/short_video.mp4", help="Caminho do arquivo final (.mp4)")
     parser.add_argument("--voice", "-v", type=str, default="pt-BR-AntonioNeural", help="Voz TTS (padrão: pt-BR-AntonioNeural)")
     parser.add_argument("--lang", "-l", type=str, default="pt", help="Idioma do roteiro e narração (ex: 'pt', 'en')")
@@ -90,6 +93,7 @@ def main():
         topic=args.topic,
         niche=args.niche,
         output_path=args.output,
+        format_ratio=args.format,
         voice=args.voice,
         language=args.lang
     )

@@ -1,111 +1,87 @@
-# Automação de Vídeos Verticais (YouTube Shorts / TikTok / Reels)
+# Automação de Gerador de Vídeos com Interface Web & CLI
 
-Este projeto é um script em Python completo para automatizar a criação de vídeos verticais (formato 9:16) a partir de uma simples descrição de texto ou tema.
+Este projeto é uma aplicação completa em Python para automatizar a criação de vídeos em múltiplos formatos (**Vertical 9:16**, **Horizontal 16:9** e **Quadrado 1:1**) a partir de uma simples descrição de texto ou tema.
+
+---
+
+## 💻 Interface Web Interativa (Streamlit) e Terminal (CLI)
+
+O projeto conta com **duas formas de uso**:
+1. **Interface Web (Navegador/App)**: Painel interativo para preencher o tema, escolher o formato e baixar o arquivo final `.mp4`.
+2. **Terminal (Linha de Comando)**: Execução direta por parâmetros de terminal.
 
 ---
 
 ## 🛠️ Como Funciona o Fluxo
 
-1. **Entrada**: Forneça o tema/descrição e o nicho do vídeo no terminal.
-2. **Roteiro Dinâmico**: Usa a API da OpenAI (ou um gerador estruturado automático de fallback) para criar um roteiro curto dividido em cenas.
-3. **Áudio / Narração Realista**: Converte o texto em voz usando `edge-tts` (vozes neurais hiper-realistas) ou `gTTS`.
-4. **B-roll Visuais**: Baixa vídeos de fundo em formato vertical (9:16) da API do Pexels baseando-se nas palavras-chave do roteiro (ou gera telas de fundo estilizadas caso não haja chave de API).
-5. **Edição e Legendas Automáticas**: Utiliza a biblioteca `MoviePy` e `Pillow` para recortar/formatar vídeos em 1080x1920, sincronizar o áudio da narração e aplicar legendas estilizadas centralizadas na tela.
-6. **Saída**: Salva o arquivo final `.mp4` na pasta de saída (padrão: `output/short_video.mp4`).
+1. **Entrada**: Você fornece o tema/detalhes do conteúdo e escolhe o formato (`9:16`, `16:9` ou `1:1`).
+2. **Roteiro Dinâmico**: Gera um roteiro em formato de cenas curtas usando ChatGPT/OpenAI (com gerador inteligente de fallback caso não haja chave de API).
+3. **Áudio e Narração**: Gera narração em voz neural hiper-realista com `edge-tts` (ou `gTTS`).
+4. **Acervo de Vídeo B-roll**: Baixa vídeos de fundo em HD correspondentes a cada cena usando a API do Pexels (ou gera fundos de alta qualidade estilizados).
+5. **Edição e Legendas**: Enquadra o vídeo no formato selecionado, alinha o áudio e aplica legendas dinâmicas em destaque.
+6. **Saída**: Disponibiliza o arquivo `.mp4` para download na web ou grava na pasta local `output/`.
 
 ---
 
-## 📋 Requisitos Pré-requisitos do Sistema
+## 📋 Requisitos do Sistema (FFmpeg)
 
-Certifique-se de ter instalado no seu sistema operacional:
-- **Python 3.10+**
-- **FFmpeg** e **ImageMagick**
+O sistema exige o **FFmpeg** instalado na máquina:
 
-### Instalando dependências do sistema:
-
-#### Linux (Ubuntu/Debian):
+### Linux (Ubuntu/Debian):
 ```bash
-sudo apt update
-sudo apt install -y ffmpeg imagemagick
+sudo apt update && sudo apt install -y ffmpeg
 ```
 
-#### macOS (Homebrew):
+### macOS (Homebrew):
 ```bash
-brew install ffmpeg imagemagick
+brew install ffmpeg
 ```
 
 ---
 
-## 📦 Instalação das Bibliotecas Python
+## 📦 Instalação das Dependências
 
-No seu terminal, clone o repositório ou navegue até a pasta do projeto e instale as dependências executando:
+Instale todas as bibliotecas necessárias executando:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-As bibliotecas instaladas incluem:
-- `moviepy` (edição e composição de vídeo)
-- `edge-tts` / `gTTS` (conversão de texto para voz)
-- `requests` (download de vídeos B-roll)
-- `pillow` (renderização e estilo das legendas)
-- `openai` (geração de roteiro com IA)
+---
+
+## 🌐 Executando a Interface Web (App no Navegador)
+
+Para abrir a interface web no seu navegador:
+
+```bash
+streamlit run app.py
+```
+
+O aplicativo abrirá no seu navegador (geralmente em `http://localhost:8501`), permitindo:
+- Digitar o tema/descrição do vídeo num campo de texto.
+- Selecionar o nicho e formato (`9:16 TikTok/Shorts/Reels`, `16:9 YouTube`, `1:1 Instagram`).
+- Escolher a voz do narrador.
+- Inserir chaves de API opcionalmente.
+- Assistir ao vídeo direto no navegador e fazer o download do `.mp4`.
 
 ---
 
-## 🔑 Configuração de Chaves de API (Opcional)
+## 🚀 Executando via Terminal (Linha de Comando)
 
-O script funciona **100% de forma autônoma mesmo sem chaves de API**, utilizando geradores e backgrounds de fallback. Para potencializar a geração automática com inteligência artificial e vídeos de acervo reais:
-
-Configure as seguintes variáveis de ambiente no seu terminal:
+Também é possível gerar vídeos via CLI:
 
 ```bash
-# Para gerar roteiros via ChatGPT/OpenAI:
-export OPENAI_API_KEY="sua_chave_openai_aqui"
+# Vídeo Vertical (Shorts/TikTok - 9:16)
+python3 generate_short.py --topic "Curiosidades do Espaço" --niche "Ciência" --format 9:16
 
-# Para baixar vídeos HD B-roll do Pexels:
-export PEXELS_API_KEY="sua_chave_pexels_aqui"
+# Vídeo Horizontal (YouTube - 16:9)
+python3 generate_short.py --topic "Dicas de Finanças Pessoais" --niche "Finanças" --format 16:9 --output output/financas_yt.mp4
 ```
 
----
-
-## 🚀 Como Executar no Terminal
-
-Para gerar um vídeo, basta executar o script `generate_short.py` passando o tema e o nicho do vídeo.
-
-### Exemplo Simples:
-```bash
-python3 generate_short.py --topic "Curiosidades sobre o Espaço" --niche "Ciência"
-```
-
-### Exemplo Completo com Caminho de Saída e Voz Personalizada:
-```bash
-python3 generate_short.py \
-  --topic "Como economizar dinheiro investindo" \
-  --niche "Finanças" \
-  --output "output/financas_investimento.mp4" \
-  --voice "pt-BR-AntonioNeural" \
-  --lang "pt"
-```
-
-### Parâmetros Disponíveis:
-- `--topic` / `-t`: (Obrigatório) O tema ou descrição do vídeo.
-- `--niche` / `-n`: O nicho do conteúdo (ex: `Ciência`, `Finanças`, `Tecnologia`, `Fitness`).
-- `--output` / `-o`: Onde salvar o arquivo final `.mp4` (padrão: `output/short_video.mp4`).
-- `--voice` / `-v`: A voz neural para narração (ex: `pt-BR-AntonioNeural`, `pt-BR-FranciscaNeural`).
-- `--lang` / `-l`: Idioma do roteiro e narração (`pt` para português, `en` para inglês).
-
----
-
-## 📁 Estrutura do Projeto
-
-```
-.
-├── generate_short.py   # CLI e fluxo principal de automação
-├── script_generator.py # Módulo de geração de roteiro (OpenAI / Fallback)
-├── tts_generator.py    # Módulo de conversão de texto para voz (Edge-TTS / gTTS)
-├── video_fetcher.py    # Módulo de busca e download de B-roll (Pexels / Canvas)
-├── video_editor.py     # Módulo de edição, enquadramento 9:16 e legendas (MoviePy)
-├── requirements.txt    # Lista de bibliotecas necessárias
-└── README.md           # Guia de uso e documentação em português
-```
+### Parâmetros do CLI:
+- `--topic` / `-t`: Tema do vídeo.
+- `--niche` / `-n`: Categoria ou nicho do conteúdo.
+- `--format` / `-f`: Formato (`9:16`, `16:9`, `1:1`).
+- `--output` / `-o`: Caminho do arquivo de saída `.mp4`.
+- `--voice` / `-v`: Voz do narrador (ex: `pt-BR-AntonioNeural`, `pt-BR-FranciscaNeural`).
+- `--lang` / `-l`: Idioma do roteiro e narração (`pt` ou `en`).
