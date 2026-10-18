@@ -1,87 +1,44 @@
-# Automação de Gerador de Vídeos com Interface Web & CLI
+# 🎬 Gerador de Vídeos Automáticos com IA
 
-Este projeto é uma aplicação completa em Python para automatizar a criação de vídeos em múltiplos formatos (**Vertical 9:16**, **Horizontal 16:9** e **Quadrado 1:1**) a partir de uma simples descrição de texto ou tema.
-
----
-
-## 💻 Interface Web Interativa (Streamlit) e Terminal (CLI)
-
-O projeto conta com **duas formas de uso**:
-1. **Interface Web (Navegador/App)**: Painel interativo para preencher o tema, escolher o formato e baixar o arquivo final `.mp4`.
-2. **Terminal (Linha de Comando)**: Execução direta por parâmetros de terminal.
+Este aplicativo permite criar vídeos completos (**TikTok/Shorts 9:16**, **YouTube 16:9** e **Instagram 1:1**) apenas digitando uma descrição ou tema do conteúdo!
 
 ---
 
-## 🛠️ Como Funciona o Fluxo
+## 🖱️ Como Abrir o Aplicativo com 1 Clique (Sem Precisar Saber Programar!)
 
-1. **Entrada**: Você fornece o tema/detalhes do conteúdo e escolhe o formato (`9:16`, `16:9` ou `1:1`).
-2. **Roteiro Dinâmico**: Gera um roteiro em formato de cenas curtas usando ChatGPT/OpenAI (com gerador inteligente de fallback caso não haja chave de API).
-3. **Áudio e Narração**: Gera narração em voz neural hiper-realista com `edge-tts` (ou `gTTS`).
-4. **Acervo de Vídeo B-roll**: Baixa vídeos de fundo em HD correspondentes a cada cena usando a API do Pexels (ou gera fundos de alta qualidade estilizados).
-5. **Edição e Legendas**: Enquadra o vídeo no formato selecionado, alinha o áudio e aplica legendas dinâmicas em destaque.
-6. **Saída**: Disponibiliza o arquivo `.mp4` para download na web ou grava na pasta local `output/`.
+Para facilitar o seu uso, foram criados executadores automáticos:
 
----
+### 🪟 No Windows:
+1. Abra a pasta do projeto.
+2. Dê **dois cliques** no arquivo **`executar_app.bat`**.
+3. O aplicativo vai instalar tudo sozinho e abrir a tela do aplicativo diretamente no seu navegador de internet!
 
-## 📋 Requisitos do Sistema (FFmpeg)
-
-O sistema exige o **FFmpeg** instalado na máquina:
-
-### Linux (Ubuntu/Debian):
-```bash
-sudo apt update && sudo apt install -y ffmpeg
-```
-
-### macOS (Homebrew):
-```bash
-brew install ffmpeg
-```
+### 🍎 No Mac ou 🐧 Linux:
+1. Dê **dois cliques** ou execute no terminal o arquivo **`executar_app.sh`**:
+   ```bash
+   ./executar_app.sh
+   ```
+2. O navegador abrirá automaticamente com o aplicativo pronto para uso!
 
 ---
 
-## 📦 Instalação das Dependências
+## 📱 Como Usar a Interface do Aplicativo
 
-Instale todas as bibliotecas necessárias executando:
+Quando o aplicativo abrir no seu navegador:
 
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 🌐 Executando a Interface Web (App no Navegador)
-
-Para abrir a interface web no seu navegador:
-
-```bash
-streamlit run app.py
-```
-
-O aplicativo abrirá no seu navegador (geralmente em `http://localhost:8501`), permitindo:
-- Digitar o tema/descrição do vídeo num campo de texto.
-- Selecionar o nicho e formato (`9:16 TikTok/Shorts/Reels`, `16:9 YouTube`, `1:1 Instagram`).
-- Escolher a voz do narrador.
-- Inserir chaves de API opcionalmente.
-- Assistir ao vídeo direto no navegador e fazer o download do `.mp4`.
+1. **Campo de Texto**: Digite sobre o que você quer que o vídeo seja (ex: *"Curiosidades sobre o universo e buracos negros"*).
+2. **Formato**: Escolha se deseja um vídeo **Vertical (TikTok/Shorts/Reels)**, **Horizontal (YouTube)** ou **Quadrado**.
+3. **Voz do Narrador**: Escolha a voz masculina ou feminina em Português.
+4. **Clique em "Gerar Vídeo Agora"**:
+   - O aplicativo vai escrever o roteiro, gravar a narração, escolher os vídeos de fundo e colocar legendas bonitas na tela.
+   - Quando terminar, você pode **assistir ao vídeo na própria tela** e clicar no botão **"Baixar Arquivo MP4"** para salvar no seu computador!
 
 ---
 
-## 🚀 Executando via Terminal (Linha de Comando)
+## 📋 Pré-requisito Único (FFmpeg)
 
-Também é possível gerar vídeos via CLI:
+Para que o computador consiga unir o som e a imagem no arquivo final `.mp4`, o programa precisa do utilitário gratuito **FFmpeg** instalado no seu computador.
 
-```bash
-# Vídeo Vertical (Shorts/TikTok - 9:16)
-python3 generate_short.py --topic "Curiosidades do Espaço" --niche "Ciência" --format 9:16
-
-# Vídeo Horizontal (YouTube - 16:9)
-python3 generate_short.py --topic "Dicas de Finanças Pessoais" --niche "Finanças" --format 16:9 --output output/financas_yt.mp4
-```
-
-### Parâmetros do CLI:
-- `--topic` / `-t`: Tema do vídeo.
-- `--niche` / `-n`: Categoria ou nicho do conteúdo.
-- `--format` / `-f`: Formato (`9:16`, `16:9`, `1:1`).
-- `--output` / `-o`: Caminho do arquivo de saída `.mp4`.
-- `--voice` / `-v`: Voz do narrador (ex: `pt-BR-AntonioNeural`, `pt-BR-FranciscaNeural`).
-- `--lang` / `-l`: Idioma do roteiro e narração (`pt` ou `en`).
+- **Linux**: `sudo apt install -y ffmpeg`
+- **Mac**: `brew install ffmpeg`
+- **Windows**: Baixar o FFmpeg pelo site oficial ou instalador rápido.
